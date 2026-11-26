@@ -1,22 +1,37 @@
 # GeoLogos
 
-Extract logos from @etalab/geozones’ data for French towns.
+Extract logos (flags or blazons) of French towns from Wikimedia Commons.
 
-You have to run [GeoZones](https://github.com/etalab/geozones)
-commands first to build the Mongo DB that GeoLogos access to
-for retrieving logos’ paths.
+Two scripts are available:
+
+- `geologos.py` uses [GeoZones](https://github.com/etalab/geozones)' data:
+  you have to run GeoZones commands first to build the MongoDB database
+  GeoLogos reads logos' file names from.
+- `download_logos.py` crawls the Commons category
+  [Logos of communes of France](https://commons.wikimedia.org/wiki/Category:Logos_of_communes_of_France)
+  directly and does not need any database.
 
 ## Install
 
-    $ python3.5 -m venv ~/.virtualenvs/geologos
+    $ python3 -m venv ~/.virtualenvs/geologos
     $ source ~/.virtualenvs/geologos/bin/activate
     $ pip install -r requirements.pip
 
-## Run (takes about 3h30 as of February 2016)
+## Run
 
-    $ ./geologos.py
+From GeoZones data (takes about 3h30 as of February 2016):
 
-## Enjoy!
+    $ ./geologos.py [--mongo-uri mongodb://localhost:27017/] \
+                    [--output-dir logos] [--archive geologos.tar.xz] \
+                    [--no-compress] [--delay 0]
 
-You should have generated an archive file (about 160Mo)
-with all logos in it.
+You should then have an archive file (about 160Mo) with all logos in it.
+
+From the Commons category:
+
+    $ ./download_logos.py [--category "Category:Logos of communes of France"] \
+                          [--depth 2] [--output-dir logos_commons_cat] \
+                          [--delay 0.4]
+
+Both scripts can be interrupted and re-run: already downloaded files
+are skipped and only missing ones are fetched again.
