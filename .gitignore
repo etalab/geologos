@@ -64,3 +64,7 @@ target/
 # Data
 logos
 geologos.tar.xz
+logos_commons_cat
+*.part
+commons_urls.json
+communes_france.json
